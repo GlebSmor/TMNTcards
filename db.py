@@ -92,7 +92,6 @@ cards_list = [[result[i], result[i + 1], result[i + 2]] for i in range(0, len(re
 
 link = 'https://www.laststicker.ru/i/cards/838/'
 count = 521
-print(cards_list)
 for card in cards_list:
     img = link + str(count) + '.jpg'
     cur.execute(f"INSERT INTO Brothers_in_Arms (number, name, category, rarity, image) VALUES ('{count}', "
@@ -106,5 +105,10 @@ for elem in data:
     else:
         cur.execute(f"UPDATE Brothers_in_Arms SET availability = 'Нет' WHERE number = {elem[0]}")
 
+
+cur.execute(f"UPDATE Way_of_ninja SET name = 'Волшебные крылья, уровень 50' WHERE number = 66")
+cur.execute(f"UPDATE Way_of_ninja SET name = 'Хан 16 - летний' WHERE number = 134")
+cur.execute(f"UPDATE Shadow_Warriors SET name = 'Стокман в 2105 году' WHERE number = 321")
+cur.execute(f"UPDATE Brothers_in_Arms SET name = 'Репортёр :5-й Канал' WHERE number = 557")
 
 db.commit()

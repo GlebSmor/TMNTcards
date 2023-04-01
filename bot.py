@@ -23,18 +23,18 @@ def search(message: Message):
         number = int(message.text)
         if 1 <= number <= 260:
             data = cur.execute(f"SELECT * FROM Way_of_ninja WHERE number = {number}").fetchall()[0]
-            text = f'Название: {data[1]}\n\nРедкость: {data[3]}\nКатегория: {data[2]}\n\nНомер: {data[0]}/260\n' \
+            text = f'Название: {data[1]}\n\nРедкость: {data[3]}\nКатегория: {data[2]}\n\nНомер: {data[0]}/670\n' \
                    f'Номер в серии: {data[0]}/260'
             photo = data[4]
 
         elif 261 <= number <= 520:
             data = cur.execute(f"SELECT * FROM Shadow_Warriors WHERE number = {number}").fetchall()[0]
-            text = f'Название: {data[2]}\n\nРедкость: {data[3]}\n\nНомер: {data[1]}/520\nНомер в серии {data[0]}/260'
+            text = f'Название: {data[2]}\n\nРедкость: {data[3]}\n\nНомер: {data[1]}/670\nНомер в серии {data[0]}/260'
             photo = data[4]
 
         elif 521 <= number <= 670:
             data = cur.execute(f"SELECT * FROM Brothers_in_Arms WHERE number = {number}").fetchall()[0]
-            text = f'Название: {data[2]}\n\nРедкость: {data[4]}\nКатегория: {data[2]}\n\nНомер: {data[1]}/670\n' \
+            text = f'Название: {data[2]}\n\nРедкость: {data[4]}\nКатегория: {data[3]}\n\nНомер: {data[1]}/670\n' \
                    f'Номер в серии {data[0]}/260'
             photo = data[5]
 
