@@ -1,9 +1,8 @@
-from env import text_WoN, i_have_WoN, text_SW, i_have_SW, text_BiA, i_have_BiA
-import re
+from parsing import cards_list_WoN, i_have_WoN, cards_list_SW, i_have_SW, cards_list_BiA, i_have_BiA
 import sqlite3
 
 
-db = sqlite3.connect('cards.db')
+db = sqlite3.connect('cards.sqlite3')
 cur = db.cursor()
 
 cur.execute('''CREATE TABLE IF NOT EXISTS Way_of_ninja (
@@ -36,21 +35,18 @@ cur.execute('''CREATE TABLE IF NOT EXISTS Brothers_in_Arms (
 # ---------------------------------------------------Way of Ninja-------------------------------------------------------
 
 
-result = re.findall(r">[CPYа-яА-ЯЁё\W]+<", text_WoN)
-cards_list = [[result[i], result[i + 1], result[i + 2]] for i in range(0, len(result) - 2, 3)]
-
 link = 'https://www.laststicker.ru/i/cards/123/'
 count = 1
-for card in cards_list:
+for card in cards_list_WoN:
     if count <= 260:
         img = link + str(count) + '.jpg'
-        cur.execute(f"INSERT INTO Way_of_ninja (name, category, rarity, image) VALUES ('{card[0][1:-1]}', "
-                    f"'{card[1][1:-1]}', '{card[2][1:-1]}', '{img}')")
+        cur.execute(f"INSERT INTO Way_of_ninja (name, category, rarity, image) VALUES ('{card[0]}', "
+                    f"'{card[1]}', '{card[2]}', '{img}')")
     else:
         img = link + 'c' + str(count - 260) + '.jpg'
         cur.execute(
-            f"INSERT INTO Way_of_ninja (name, category, rarity, image) VALUES ('{card[0][1:-1]}', "
-            f"'{card[1][1:-1]}', '{card[2][1:-1]}', '{img}')")
+            f"INSERT INTO Way_of_ninja (name, category, rarity, image) VALUES ('{card[0]}', "
+            f"'{card[1]}', '{card[2]}', '{img}')")
     count += 1
 
 data = cur.execute(f"SELECT number, availability FROM Way_of_ninja WHERE availability IS NULL").fetchall()
@@ -65,15 +61,12 @@ for elem in data:
 # --------------------------------------------------Shadow Warriors-----------------------------------------------------
 
 
-result = re.findall(r">[CPYа-яА-ЯЁё\W]+<", text_SW)
-cards_list = [[result[i], result[i + 1], result[i + 2]] for i in range(0, len(result) - 2, 3)]
-
 link = 'https://www.laststicker.ru/i/cards/274/'
 count = 261
-for card in cards_list:
+for card in cards_list_SW:
     img = link + str(count) + '.jpg'
-    cur.execute(f"INSERT INTO Shadow_Warriors (number, name, rarity, image) VALUES ('{count}', '{card[0][1:-1]}',"
-                f"'{card[1][1:-1]}', '{img}')")
+    cur.execute(f'INSERT INTO Shadow_Warriors (number, name, rarity, image) VALUES ("{count}", "{card[0]}",'
+                f'"{card[1]}", "{img}")')
     count += 1
 
 data = cur.execute(f"SELECT number, availability FROM Shadow_Warriors WHERE availability IS NULL").fetchall()
@@ -87,15 +80,12 @@ for elem in data:
 # -------------------------------------------------Brothers in Arms-----------------------------------------------------
 
 
-result = re.findall(r">[CPYа-яА-ЯЁё\W]+<", text_BiA)
-cards_list = [[result[i], result[i + 1], result[i + 2]] for i in range(0, len(result) - 2, 3)]
-
 link = 'https://www.laststicker.ru/i/cards/838/'
 count = 521
-for card in cards_list:
+for card in cards_list_BiA:
     img = link + str(count) + '.jpg'
-    cur.execute(f"INSERT INTO Brothers_in_Arms (number, name, category, rarity, image) VALUES ('{count}', "
-                f"'{card[0][1:-1]}', '{card[1][1:-1]}', '{card[2][1:-1]}', '{img}')")
+    cur.execute(f'INSERT INTO Brothers_in_Arms (number, name, category, rarity, image) VALUES ("{count}", '
+                f'"{card[0]}", "{card[1]}", "{card[2]}", "{img}")')
     count += 1
 
 data = cur.execute(f"SELECT number, availability FROM Brothers_in_Arms WHERE availability IS NULL").fetchall()
@@ -105,10 +95,5 @@ for elem in data:
     else:
         cur.execute(f"UPDATE Brothers_in_Arms SET availability = 'Нет' WHERE number = {elem[0]}")
 
-
-cur.execute(f"UPDATE Way_of_ninja SET name = 'Волшебные крылья, уровень 50' WHERE number = 66")
-cur.execute(f"UPDATE Way_of_ninja SET name = 'Хан 16 - летний' WHERE number = 134")
-cur.execute(f"UPDATE Shadow_Warriors SET name = 'Стокман в 2105 году' WHERE number = 321")
-cur.execute(f"UPDATE Brothers_in_Arms SET name = 'Репортёр :5-й Канал' WHERE number = 557")
 
 db.commit()

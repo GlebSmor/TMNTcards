@@ -17,7 +17,8 @@ def start(message: Message):
 
 
 def search(message: Message):
-    db = sqlite3.connect('cards.db')
+    silver = ['C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'С1', 'С2', 'С3', 'С4', 'С5', 'С6', 'С7']
+    db = sqlite3.connect('cards.sqlite3')
     cur = db.cursor()
     try:
         number = int(message.text)
@@ -35,16 +36,24 @@ def search(message: Message):
         elif 521 <= number <= 670:
             data = cur.execute(f"SELECT * FROM Brothers_in_Arms WHERE number = {number}").fetchall()[0]
             text = f'Название: {data[2]}\n\nРедкость: {data[4]}\nКатегория: {data[3]}\n\nНомер: {data[1]}/670\n' \
-                   f'Номер в серии {data[0]}/260'
+                   f'Номер в серии {data[0]}/150'
             photo = data[5]
 
         else:
             raise Exception
 
         bot.send_photo(chat_id=message.chat.id, photo=photo, caption=text)
-    except:
-        text = 'Вы ввели некорректный номер'
-        bot.send_message(chat_id=message.chat.id, text=text)
+    except (ValueError, Exception):
+        if message.text.upper() in silver:
+            number = int(message.text[1:]) + 260
+            data = cur.execute(f"SELECT * FROM Way_of_ninja WHERE number = {number}").fetchall()[0]
+            text = f'Название: {data[1]}\n\nРедкость: {data[3]}\nКатегория: {data[2]}\n\n' \
+                   f'Номер в серии: {number - 260}/7'
+            photo = data[4]
+            bot.send_photo(chat_id=message.chat.id, photo=photo, caption=text)
+        else:
+            text = 'Вы ввели некорректный номер'
+            bot.send_message(chat_id=message.chat.id, text=text)
     bot.register_next_step_handler(message, callback=search)
 
 
