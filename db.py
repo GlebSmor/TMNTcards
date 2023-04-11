@@ -6,7 +6,8 @@ db = sqlite3.connect('cards.sqlite3')
 cur = db.cursor()
 
 cur.execute('''CREATE TABLE IF NOT EXISTS Way_of_ninja (
-                number INTEGER PRIMARY KEY,
+                id INTEGER PRIMARY KEY,
+                number INTEGER NOT NULL,
                 name TEXT NOT NULL,
                 category TEXT NOT NULL,
                 rarity TEXT NOT NULL,
@@ -40,12 +41,12 @@ count = 1
 for card in cards_list_WoN:
     if count <= 260:
         img = link + str(count) + '.jpg'
-        cur.execute(f"INSERT INTO Way_of_ninja (name, category, rarity, image) VALUES ('{card[0]}', "
+        cur.execute(f"INSERT INTO Way_of_ninja (number, name, category, rarity, image) VALUES ('{count}','{card[0]}', "
                     f"'{card[1]}', '{card[2]}', '{img}')")
     else:
         img = link + 'c' + str(count - 260) + '.jpg'
         cur.execute(
-            f"INSERT INTO Way_of_ninja (name, category, rarity, image) VALUES ('{card[0]}', "
+            f"INSERT INTO Way_of_ninja (number, name, category, rarity, image) VALUES ('{count}', '{card[0]}', "
             f"'{card[1]}', '{card[2]}', '{img}')")
     count += 1
 

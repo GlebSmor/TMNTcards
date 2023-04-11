@@ -12,11 +12,8 @@ def parser(link):
     response = requests.get(link, headers=headers).content
 
     soup = Soup(response, 'html.parser')
-    if link == 'https://www.laststicker.ru/cards/turtleninja_cards/':
-        string = str(soup.find_all('tbody')[1])
-    else:
-        string = str(soup.find_all('tbody'))
-    string = string[8:]
+    string = str(soup.find_all('tbody'))
+    string = ''.join(string.split("\n"))
 
     result = re.findall(r">[CcPYа-яА-ЯёЁ\W0-9]+<", string)
 
@@ -38,6 +35,7 @@ def parser(link):
 cards_list_WoN = parser(link1)
 cards_list_SW = parser(link2)
 cards_list_BiA = parser(link3)
+
 
 i_have_WoN = [1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 17, 19, 21, 23, 25, 26, 27, 29, 35, 37, 39, 41, 42, 43, 44, 46,
               50, 51, 53, 58, 59, 61, 64, 65, 67, 69, 70, 72, 74, 78, 81, 82, 84, 89, 93, 94, 97, 98, 100, 101, 103,
