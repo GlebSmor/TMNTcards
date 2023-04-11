@@ -26,7 +26,7 @@ def search(message: Message):
             data = cur.execute(f"SELECT * FROM Way_of_ninja WHERE number = {number}").fetchall()[0]
             text = f'Название: {data[2]}\n\nРедкость: {data[4]}\nКатегория: {data[3]}\n\nНомер: {data[1]}/670\n' \
                    f'Номер в серии: {data[0]}/260'
-            photo = data[4]
+            photo = data[5]
 
         elif 261 <= number <= 520:
             data = cur.execute(f"SELECT * FROM Shadow_Warriors WHERE number = {number}").fetchall()[0]
@@ -47,9 +47,9 @@ def search(message: Message):
         if message.text.upper() in silver:
             number = int(message.text[1:]) + 260
             data = cur.execute(f"SELECT * FROM Way_of_ninja WHERE number = {number}").fetchall()[0]
-            text = f'Название: {data[1]}\n\nРедкость: {data[3]}\nКатегория: {data[2]}\n\n' \
+            text = f'Название: {data[2]}\n\nРедкость: {data[4]}\nКатегория: {data[3]}\n\n' \
                    f'Номер в серии: {number - 260}/7'
-            photo = data[4]
+            photo = data[5]
             bot.send_photo(chat_id=message.chat.id, photo=photo, caption=text)
         else:
             text = 'Вы ввели некорректный номер'
